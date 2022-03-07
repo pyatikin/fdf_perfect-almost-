@@ -4,15 +4,17 @@ int	chars(int fd, int i, char *argc)
 {
 	char	b;
 
-	i = 0;
+	
 	fd = open(argc, O_RDONLY);
 	if (fd < 0)
 	{
-		write(1, "error\n", 6);
+		i = write(1, "error\n", 6);
 		exit(1);
 	}
+	i = 0;
 	while (read(fd, &b, 1))
 		i++;
+	i++;
 	close(fd);
 	return (i);
 }
@@ -25,6 +27,7 @@ char	*buffer(int fd, int i, char *argc, char *buf)
 	fd = open(argc, O_RDONLY);
 	while (read(fd, &b, 1))
 		buf[i++] = b;
+	buf[i] = '\0';
 	close(fd);
 	return (buf);
 }
@@ -33,7 +36,7 @@ t_fdf	map(char *buf, int i, int fd, t_fdf *field)
 {
 	i = 0;
 	fd = 1;
-	while (buf[i] != '\n')
+	while (buf[i] && buf[i] != '\n')
 	{
 		i++;
 		if (buf[i] == ' ')

@@ -33,7 +33,7 @@ int	key(int key_button, t_fdf *field)
 	int	j;
 
 	j = 0;
-	/*write(1, ft_itoa(key_button), sizeof(ft_itoa(key_button))); write(1, "\n", 1); Для полученя кода кнопок!!!!!!!!!!!*/
+	write(1, ft_itoa(key_button), sizeof(ft_itoa(key_button))); write(1, "\n", 1); /*Для полученя кода кнопок!!!!!!!!!!!*/
 	buttom_hook(key_button, field);
 	if (key_button == 65307)
 	{
@@ -51,12 +51,27 @@ int	key(int key_button, t_fdf *field)
 	return (0);
 }
 
+int ft_close(t_fdf *field)
+{
+	int	j;
+
+	j = 0;
+	mlx_destroy_window(field->mlx_ptr, field->win_ptr);
+	while (j < field->hight)
+	{
+		free(field->matrix[j]);
+		j++;
+	}
+	free(field->matrix);
+	return(0);
+}
+
 int	main(int argv, char **argc)
 {
 	t_fdf	field;
 
 	field = main_reader(argc[1]);
-	field.zooming = 50;
+	field.zooming = 7;
 	field.place_x = 0;
 	field.place_y = 0;
 	field.corn = 0.8;
@@ -65,5 +80,7 @@ int	main(int argv, char **argc)
 	field.win_ptr = mlx_new_window(field.mlx_ptr, 1000, 1000, "FDF");
 	draw(field);
 	mlx_key_hook(field.win_ptr, key, &field);
-	mlx_loop(field.mlx_ptr);
+	mlx_hook(field.win_ptr, 17, 0, &ft_close, &field);
+	//mlx_loop(field.mlx_ptr);
+	return (0);
 }
